@@ -1,0 +1,9 @@
+name: GoogleAuthenticator
+version: '${project.version}'
+main: de.tomino.googleauthenticator.GoogleAuthenticator
+api-version: 1.19
+commands:
+  removeplayer:
+    description: Removes a player from the database
+    usage: /removeplayer <player>
+    permission: googleauthenticator.removeplayer
