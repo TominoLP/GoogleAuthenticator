@@ -26,7 +26,7 @@ public class PlayerUtils {
      * @param data   The data that should be converted to the QR code
      */
     public void giveQrCodeMapToPlayer(@NotNull Player player, int slot, @NotNull String data) {
-        final Qrcodegen renderer = new Qrcodegen(data);
+        final QrCodeGen renderer = new QrCodeGen(data);
         final MapView mapView = Bukkit.createMap(player.getWorld());
         mapView.getRenderers().forEach(mapView::removeRenderer);
         mapView.addRenderer(renderer);

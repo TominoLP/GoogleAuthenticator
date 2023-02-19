@@ -29,7 +29,7 @@ public final class GoogleAuthenticator extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(this.playerFreezer = new PlayerFreezer(), this);
 
         // Registering the Commands
-        Objects.requireNonNull(this.getCommand("removeplayer")).setExecutor(new RemovePlayer(this));
+        Objects.requireNonNull(this.getCommand("removePlayer")).setExecutor(new RemovePlayer(this));
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
+
 import java.util.logging.Level;
 
 public class Utils {

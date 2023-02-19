@@ -34,6 +34,7 @@ public class CodeValidator {
             Bukkit.getLogger().log(Level.SEVERE, "Mac can't be created: ", exception);
             exception.printStackTrace();
         }
+
         if (mac == null) return false;
         byte[] hash = mac.doFinal(data);
         int offset = hash[hash.length - 1] & 0xf;
@@ -48,5 +49,3 @@ public class CodeValidator {
     }
 
 }
-
-

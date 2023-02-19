@@ -26,6 +26,7 @@ public class PlayerFreezer implements Listener {
 
     public void lockPlayer(@NotNull Player player) {
         if (isPlayerLocked(player)) return;
+        player.setAllowFlight(true);
         player.setFlying(true);
         player.setFlySpeed(0.0F);
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 128, false, false, false));
@@ -37,6 +38,7 @@ public class PlayerFreezer implements Listener {
         if (!isPlayerLocked(player)) return;
         player.setFlySpeed(0.1F);
         player.setFlying(false);
+        player.setAllowFlight(false);
         player.removePotionEffect(PotionEffectType.BLINDNESS);
         player.playSound(player.getLocation(), "minecraft:block.note_block.pling", 1, 1);
         player.resetTitle();
@@ -89,5 +91,10 @@ public class PlayerFreezer implements Listener {
                 yaw,
                 pitch
         );
+    }
+
+    private void blockrotation() {
+
+
     }
 }

@@ -21,17 +21,17 @@ import java.util.logging.Level;
 /**
  * A Map Renderer, that renders a QR code by the data
  */
-public class Qrcodegen extends MapRenderer {
+public class QrCodeGen extends MapRenderer {
 
     private final BufferedImage image;
     private boolean done;
 
-    public Qrcodegen(String data) {
+    public QrCodeGen(String data) {
         this.image = this.generateQrCode(data);
     }
 
     /**
-     * Genrate the QR code from the data as a BufferedImage
+     * Generate the QR code from the data as a BufferedImage
      *
      * @param data The data that should be displayed as a QR code
      * @return The generated BufferedImage
