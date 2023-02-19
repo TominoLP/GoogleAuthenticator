@@ -21,7 +21,7 @@ import java.util.UUID;
 public class PlayerJoin implements Listener {
 
     private final GoogleAuthenticator main;
-    public final Map<UUID, String> codes = new HashMap<>();
+    public static final Map<UUID, String> codes = new HashMap<>();
     private final Map<UUID, Integer> tries = new HashMap<>();
     private final Map<UUID, PlayerInformation> information = new HashMap<>();
 
@@ -45,17 +45,18 @@ public class PlayerJoin implements Listener {
             final String link = "otpauth://totp/" + DomainGetter.getServersDomain() + "?secret=" + secretKey
                     + "&issuer=MCAUTH-" + player.getName() + "&algorithm=SHA1&digits=6&period=30";
 
-            this.codes.put(player.getUniqueId(), secretKey);
+            codes.put(player.getUniqueId(), secretKey);
             this.main.getPlayerUtils().giveQrCodeMapToPlayer(player, 4, link);
             player.sendMessage("§3§l-----------------MC-AUTH----------------");
             player.sendMessage("§8Please scan the QR Code with your Google Authenticator App");
             player.sendMessage("§8If you don't have the App, you can use this link to get it:");
             player.sendMessage("§7https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2");
+            player.sendMessage("§7https://apps.apple.com/us/app/google-authenticator/id388497605");
             player.sendMessage("§8Please enter the code you get from the app in the chat");
             player.sendMessage("§3§l----------------------------------------");
         } else {
             player.sendTitle("§4ENTER YOU CODE", "§cPlease enter your code in the chat to verify your identity", 10, 100000, 10);
-            this.codes.put(player.getUniqueId(), key);
+            codes.put(player.getUniqueId(), key);
         }
     }
 
@@ -63,9 +64,7 @@ public class PlayerJoin implements Listener {
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         if (!this.codes.containsKey(event.getPlayer().getUniqueId())) return;
-
         final String code = this.codes.get(player.getUniqueId());
-
         if (!CodeValidator.validateCode(code, event.getMessage())) {
             if (!this.tries.containsKey(player.getUniqueId())) {
                 this.tries.put(player.getUniqueId(), 0);
@@ -85,11 +84,8 @@ public class PlayerJoin implements Listener {
         this.tries.remove(player.getUniqueId());
         Bukkit.getScheduler().runTask(this.main, () -> this.main.getPlayerFreezer().unlockPlayer(player));
         player.resetTitle();
-
         this.codes.remove(player.getUniqueId());
         final PlayerInformation playerInformation = this.information.get(player.getUniqueId()).clone();
-        this.codes.remove(player.getUniqueId());
-
         Bukkit.getScheduler().runTask(this.main, () -> player.setGameMode(playerInformation.gameMode()));
         player.getInventory().setItem(4, playerInformation.itemStack());
 
@@ -103,8 +99,6 @@ public class PlayerJoin implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.codes.remove(event.getPlayer().getUniqueId());
         final PlayerInformation playerInformation = this.information.get(event.getPlayer().getUniqueId()).clone();
-        this.codes.remove(event.getPlayer().getUniqueId());
-
         event.getPlayer().setGameMode(playerInformation.gameMode());
         event.getPlayer().getInventory().setItem(4, playerInformation.itemStack());
     }

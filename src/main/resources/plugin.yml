@@ -7,3 +7,10 @@ commands:
     description: Removes a player from the database
     usage: /removeplayer <player>
     permission: googleauthenticator.removeplayer
+  forceauth:
+    description: Forces a player to authenticate
+    usage: /forceauth <player>
+    permission: googleauthenticator.forceauth
+
+
+

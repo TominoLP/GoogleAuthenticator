@@ -1,5 +1,6 @@
 package de.tomino.googleauthenticator;
 
+import de.tomino.googleauthenticator.comamnds.ForceVerify;
 import de.tomino.googleauthenticator.comamnds.RemovePlayer;
 import de.tomino.googleauthenticator.events.PlayerJoin;
 import de.tomino.googleauthenticator.utils.KeyHandler;
@@ -30,6 +31,9 @@ public final class GoogleAuthenticator extends JavaPlugin {
 
         // Registering the Commands
         Objects.requireNonNull(this.getCommand("removePlayer")).setExecutor(new RemovePlayer(this));
+        Objects.requireNonNull(this.getCommand("forceAuth")).setExecutor(new ForceVerify(this));
+
+        
     }
 
     @Override
