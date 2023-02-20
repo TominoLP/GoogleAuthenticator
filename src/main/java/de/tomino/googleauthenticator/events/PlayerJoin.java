@@ -3,8 +3,8 @@ package de.tomino.googleauthenticator.events;
 import de.tomino.googleauthenticator.GoogleAuthenticator;
 import de.tomino.googleauthenticator.utils.CodeValidator;
 import de.tomino.googleauthenticator.utils.DomainGetter;
+import de.tomino.googleauthenticator.utils.KeyHandler;
 import de.tomino.googleauthenticator.utils.PlayerInformation;
-import de.tomino.googleauthenticator.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,7 +40,7 @@ public class PlayerJoin implements Listener {
         this.main.getPlayerUtils().lockPlayer(player);
         final String key = this.main.getKeyHandler().getKey(event.getPlayer().getUniqueId());
         if (key == null) {
-            final String secretKey = Utils.generateSecretKey();
+            final String secretKey = KeyHandler.generateSecretKey();
             final String link = "otpauth://totp/" + DomainGetter.getServersDomain() + "?secret=" + secretKey
                     + "&issuer=MCAUTH-" + player.getName() + "&algorithm=SHA1&digits=6&period=30";
 
