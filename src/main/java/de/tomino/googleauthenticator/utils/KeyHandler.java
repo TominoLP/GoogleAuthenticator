@@ -31,14 +31,32 @@ public class KeyHandler {
         this.keyConfig = YamlConfiguration.loadConfiguration(this.keyFile);
     }
 
+    /**
+     * Save the secret key of the player
+     *
+     * @param uuid      The UUID of the player
+     * @param secretKey The secret key of the player
+     */
+
     public void saveKey(UUID uuid, String secretKey) {
         this.keyConfig.set(uuid.toString(), secretKey);
         this.saveConfig();
     }
 
+    /**
+     * Get the secret key of the player
+     *
+     * @param uuid The UUID of the player
+     * @return The secret key of the player
+     */
+
     public String getKey(UUID uuid) {
         return this.keyConfig.getString(uuid.toString(), null);
     }
+
+    /**
+     * Save the config
+     */
 
     private void saveConfig() {
         try {
@@ -47,6 +65,12 @@ public class KeyHandler {
             exception.printStackTrace();
         }
     }
+
+    /**
+     * Remove the player from the config
+     *
+     * @param uuid The UUID of the player
+     */
 
     public void removePlayer(UUID uuid) {
         this.keyConfig.set(uuid.toString(), null);

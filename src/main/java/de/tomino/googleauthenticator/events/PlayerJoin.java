@@ -6,7 +6,6 @@ import de.tomino.googleauthenticator.utils.DomainGetter;
 import de.tomino.googleauthenticator.utils.PlayerInformation;
 import de.tomino.googleauthenticator.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,12 +32,12 @@ public class PlayerJoin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         player.resetTitle();
-        this.information.put(player.getUniqueId(), new PlayerInformation(
-                player.getGameMode(),
-                player.getInventory().getItem(4)
-        ));
+//        this.information.put(player.getUniqueId(), new PlayerInformation(
+//                player.getGameMode(),
+//                player.getInventory().getItem(4)
+//        ));
         player.getInventory().setHeldItemSlot(4);
-        this.main.getPlayerFreezer().lockPlayer(player);
+        this.main.getPlayerUtils().lockPlayer(player);
         final String key = this.main.getKeyHandler().getKey(event.getPlayer().getUniqueId());
         if (key == null) {
             final String secretKey = Utils.generateSecretKey();
@@ -55,16 +54,15 @@ public class PlayerJoin implements Listener {
             player.sendMessage("§8Please enter the code you get from the app in the chat");
             player.sendMessage("§3§l----------------------------------------");
         } else {
-            player.sendTitle("§4ENTER YOU CODE", "§cPlease enter your code in the chat to verify your identity", 10, 100000, 10);
-            codes.put(player.getUniqueId(), key);
+            this.main.getPlayerUtils().authPlayer(player);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
-        if (!this.codes.containsKey(event.getPlayer().getUniqueId())) return;
-        final String code = this.codes.get(player.getUniqueId());
+        if (!codes.containsKey(event.getPlayer().getUniqueId())) return;
+        final String code = codes.get(player.getUniqueId());
         if (!CodeValidator.validateCode(code, event.getMessage())) {
             if (!this.tries.containsKey(player.getUniqueId())) {
                 this.tries.put(player.getUniqueId(), 0);
@@ -82,12 +80,12 @@ public class PlayerJoin implements Listener {
 
         player.sendMessage("§l§aYour code is right, Have fun!");
         this.tries.remove(player.getUniqueId());
-        Bukkit.getScheduler().runTask(this.main, () -> this.main.getPlayerFreezer().unlockPlayer(player));
+        Bukkit.getScheduler().runTask(this.main, () -> this.main.getPlayerUtils().unlockPlayer(player));
         player.resetTitle();
-        this.codes.remove(player.getUniqueId());
-        final PlayerInformation playerInformation = this.information.get(player.getUniqueId()).clone();
-        Bukkit.getScheduler().runTask(this.main, () -> player.setGameMode(playerInformation.gameMode()));
-        player.getInventory().setItem(4, playerInformation.itemStack());
+        codes.remove(player.getUniqueId());
+//        final PlayerInformation playerInformation = this.information.get(player.getUniqueId()).clone();
+//        Bukkit.getScheduler().runTask(this.main, () -> player.setGameMode(playerInformation.gameMode()));
+//        player.getInventory().setItem(4, playerInformation.itemStack());
 
         if (this.main.getKeyHandler().getKey(player.getUniqueId()) == null)
             this.main.getKeyHandler().saveKey(player.getUniqueId(), code);
@@ -97,7 +95,7 @@ public class PlayerJoin implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        this.codes.remove(event.getPlayer().getUniqueId());
+        codes.remove(event.getPlayer().getUniqueId());
         final PlayerInformation playerInformation = this.information.get(event.getPlayer().getUniqueId()).clone();
         event.getPlayer().setGameMode(playerInformation.gameMode());
         event.getPlayer().getInventory().setItem(4, playerInformation.itemStack());

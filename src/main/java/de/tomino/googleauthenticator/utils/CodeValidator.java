@@ -16,6 +16,14 @@ public class CodeValidator {
     private CodeValidator() {
     }
 
+    /**
+     * Validate the code to check if it is valid
+     *
+     * @param secret The secret key
+     * @param code   The code that should be validated
+     * @return True if the code is valid
+     */
+
     public static boolean validateCode(@NotNull String secret, @NotNull String code) {
         final Base32 base32 = new Base32();
         byte[] decodedKey = base32.decode(secret);

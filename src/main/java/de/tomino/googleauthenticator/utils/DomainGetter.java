@@ -12,6 +12,12 @@ public class DomainGetter {
     private DomainGetter() {
     }
 
+    /**
+     * Get the domain of the server
+     *
+     * @return the domain of the server
+     */
+
     @NotNull
     public static String getServersDomain() {
         String ipAddress = Bukkit.getServer().getIp();
@@ -26,6 +32,7 @@ public class DomainGetter {
             } catch (MalformedURLException exception) {
                 Bukkit.getLogger().log(Level.INFO, "Can't get the domain: ", exception);
                 exception.printStackTrace();
+                return ipAddress;
             }
             if (url == null) return "Server";
             return url.getHost();
