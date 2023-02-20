@@ -1,10 +1,7 @@
 package de.tomino.googleauthenticator.events;
 
 import de.tomino.googleauthenticator.GoogleAuthenticator;
-import de.tomino.googleauthenticator.utils.CodeValidator;
-import de.tomino.googleauthenticator.utils.DomainGetter;
-import de.tomino.googleauthenticator.utils.KeyHandler;
-import de.tomino.googleauthenticator.utils.PlayerInformation;
+import de.tomino.googleauthenticator.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +10,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.io.ObjectInputFilter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -41,8 +39,8 @@ public class PlayerJoin implements Listener {
         final String key = this.main.getKeyHandler().getKey(event.getPlayer().getUniqueId());
         if (key == null) {
             final String secretKey = KeyHandler.generateSecretKey();
-            final String link = "otpauth://totp/" + DomainGetter.getServersDomain() + "?secret=" + secretKey
-                    + "&issuer=MCAUTH-" + player.getName() + "&algorithm=SHA1&digits=6&period=30";
+            final String link = "otpauth://totp/" + player.getName() + "?secret=" + secretKey
+                    + "&issuer=MCAUTH-" + ConfigHandler.SERVERNAME + "&algorithm=SHA1&digits=6&period=30";
 
             codes.put(player.getUniqueId(), secretKey);
             this.main.getPlayerUtils().giveQrCodeMapToPlayer(player, 4, link);
@@ -70,15 +68,15 @@ public class PlayerJoin implements Listener {
             int numTries = this.tries.getOrDefault(player.getUniqueId(), 0) + 1;
             this.tries.put(player.getUniqueId(), numTries);
             if (numTries >= 3) {
-                Bukkit.getScheduler().runTask(this.main, () -> player.kickPlayer("§cYou entered the wrong code too many times"));
+                Bukkit.getScheduler().runTask(this.main, () -> player.kickPlayer(ConfigHandler.TIMEOUT));
                 return;
             }
-            player.sendMessage("§l§cYour code is wrong");
+            player.sendMessage(ConfigHandler.DENIED);
             event.setCancelled(true);
             return;
         }
 
-        player.sendMessage("§l§aYour code is right, Have fun!");
+        player.sendMessage(ConfigHandler.SUCCESS);
         this.tries.remove(player.getUniqueId());
         Bukkit.getScheduler().runTask(this.main, () -> this.main.getPlayerUtils().unlockPlayer(player));
         player.resetTitle();
@@ -96,8 +94,8 @@ public class PlayerJoin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         codes.remove(event.getPlayer().getUniqueId());
-        final PlayerInformation playerInformation = this.information.get(event.getPlayer().getUniqueId()).clone();
-        event.getPlayer().setGameMode(playerInformation.gameMode());
-        event.getPlayer().getInventory().setItem(4, playerInformation.itemStack());
+//        final PlayerInformation playerInformation = this.information.get(event.getPlayer().getUniqueId()).clone();
+//        event.getPlayer().setGameMode(playerInformation.gameMode());
+//        event.getPlayer().getInventory().setItem(4, playerInformation.itemStack());
     }
 }

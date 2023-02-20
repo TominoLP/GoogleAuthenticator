@@ -143,8 +143,6 @@ public class PlayerUtils implements Listener {
         this.main.getPlayerUtils().lockPlayer(target);
         final String key = this.main.getKeyHandler().getKey(target.getUniqueId());
         PlayerJoin.codes.put(target.getUniqueId(), key);
-        target.sendTitle("§4ENTER YOU CODE", "§cPlease enter your code in the chat to verify your identity", 10, 100000, 10);
+        target.sendTitle(ConfigHandler.TITLE, ConfigHandler.SUBTITLE, 10, 100000, 10);
     }
-
-
 }

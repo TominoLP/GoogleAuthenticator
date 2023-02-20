@@ -1,6 +1,7 @@
 package de.tomino.googleauthenticator.comamnds;
 
 import de.tomino.googleauthenticator.GoogleAuthenticator;
+import de.tomino.googleauthenticator.utils.ConfigHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +19,7 @@ public class ForceVerify implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.hasPermission("googleauthenticator.forceverify")) {
             if (args.length != 1) {
-                sender.sendMessage("Please provide a player name.");
+                sender.sendMessage(ConfigHandler.PROVIDEPLAYER);
                 return true;
             }
             Player target = sender.getServer().getPlayer(args[0]);
@@ -27,7 +28,7 @@ public class ForceVerify implements CommandExecutor {
                 return true;
             }
             this.main.getPlayerUtils().authPlayer(target);
-        } else sender.sendMessage("You don't have the permission to do this.");
+        } else sender.sendMessage(ConfigHandler.NOPERMISSION);
         return false;
     }
 }

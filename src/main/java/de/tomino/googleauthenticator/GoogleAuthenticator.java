@@ -3,6 +3,7 @@ package de.tomino.googleauthenticator;
 import de.tomino.googleauthenticator.comamnds.ForceVerify;
 import de.tomino.googleauthenticator.comamnds.RemovePlayer;
 import de.tomino.googleauthenticator.events.PlayerJoin;
+import de.tomino.googleauthenticator.utils.ConfigHandler;
 import de.tomino.googleauthenticator.utils.KeyHandler;
 import de.tomino.googleauthenticator.utils.PlayerUtils;
 import org.bukkit.Bukkit;
@@ -21,16 +22,18 @@ public final class GoogleAuthenticator extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        System.out.println("""
-                    ██████╗ ██╗   ██╗████████╗██╗  ██╗      ███████╗██╗   ██╗███████╗
-                    ██╔══██╗██║   ██║╚══██╔══╝██║  ██║      ██╔════╝╚██╗ ██╔╝██╔════╝
-                    ███████║██║   ██║   ██║   ███████║█████╗███████╗ ╚████╔╝ ███████╗
-                    ██╔══██║██║   ██║   ██║   ██╔══██║╚════╝╚════██║  ╚██╔╝  ╚════██║
-                    ██║  ██║╚██████╔╝   ██║   ██║  ██║      ███████║   ██║   ███████║
-                    ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝      ╚══════╝   ╚═╝   ╚══════╝
-                """);
-
-        System.out.println("GoogleAuthenticator " + "v" + version + " by Tomino");
+        Bukkit.getLogger().info("Loading GoogleAuthenticator...");
+        Bukkit.getLogger().info("""
+                        \n
+                        ██████╗ ██╗   ██╗████████╗██╗  ██╗      ███████╗██╗   ██╗███████╗
+                        ██╔══██╗██║   ██║╚══██╔══╝██║  ██║      ██╔════╝╚██╗ ██╔╝██╔════╝
+                        ███████║██║   ██║   ██║   ███████║█████╗███████╗ ╚████╔╝ ███████╗
+                        ██╔══██║██║   ██║   ██║   ██╔══██║╚════╝╚════██║  ╚██╔╝  ╚════██║
+                        ██║  ██║╚██████╔╝   ██║   ██║  ██║      ███████║   ██║   ███████║
+                        ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝      ╚══════╝   ╚═╝   ╚══════╝
+                                    """);
+        Bukkit.getLogger().info("GoogleAuthenticator " + "v" + version + " by Tomino");
+        ConfigHandler.loadConfig();
 
         // Create the Config System
         this.keyHandler = new KeyHandler(this);
